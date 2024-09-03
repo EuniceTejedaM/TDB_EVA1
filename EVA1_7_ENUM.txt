@@ -1,0 +1,261 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. Todos los derechos reservados.
+
+Instale la versión más reciente de PowerShell para obtener nuevas características y mejoras. https://aka.ms/PSWindows
+
+PS C:\Users\tejed> mysqlsh
+MySQL Shell 8.0.38
+
+Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.39 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| tbd_e1             |
+| world              |
++--------------------+
+7 rows in set (0.0135 sec)
+ MySQL  localhost:3306 ssl  SQL > use tbd_e1;
+Default schema set to `tbd_e1`.
+Fetching global names, object names from `tbd_e1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > show tables;
++------------------+
+| Tables_in_tbd_e1 |
++------------------+
+| automovil        |
+| mascotas         |
+| peliculas        |
+| primer_tabla     |
+| student          |
+| tv               |
++------------------+
+6 rows in set (0.0031 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc peliculas;
++--------+-------------+------+-----+---------+----------------+
+| Field  | Type        | Null | Key | Default | Extra          |
++--------+-------------+------+-----+---------+----------------+
+| id     | int         | NO   | PRI | NULL    | auto_increment |
+| titulo | varchar(50) | NO   |     | NULL    |                |
+| genero | varchar(50) | NO   |     | NULL    |                |
+| clasi  | varchar(5)  | NO   |     | NULL    |                |
++--------+-------------+------+-----+---------+----------------+
+4 rows in set (0.0042 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from peliculas;
++----+-------------+---------+-------+
+| id | titulo      | genero  | clasi |
++----+-------------+---------+-------+
+|  1 | Coraline    | Comedia | PG    |
+|  2 | Titanic     | Comedia | PG13  |
+|  3 | Shrek 2     | Comedia | PG13  |
+|  4 | Sharknado   | Drama   | PG13  |
+|  5 | Sharknado 2 | Drama   | PG13  |
+| 20 | Sharknado   | Drama   | PG13  |
+| 21 | Sharknado 3 | Drama   | PG13  |
++----+-------------+---------+-------+
+7 rows in set (0.0179 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > insert into peliculas
+                                       -> (titulo, genero, clasi)
+                                       -> value("Deadpool 3", "Komedia", "Adult");
+Query OK, 1 row affected (0.0286 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from peliculas;
++----+-------------+---------+-------+
+| id | titulo      | genero  | clasi |
++----+-------------+---------+-------+
+|  1 | Coraline    | Comedia | PG    |
+|  2 | Titanic     | Comedia | PG13  |
+|  3 | Shrek 2     | Comedia | PG13  |
+|  4 | Sharknado   | Drama   | PG13  |
+|  5 | Sharknado 2 | Drama   | PG13  |
+| 20 | Sharknado   | Drama   | PG13  |
+| 21 | Sharknado 3 | Drama   | PG13  |
+| 22 | Deadpool 3  | Komedia | Adult |
++----+-------------+---------+-------+
+8 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table playeras(
+                                       -> id int auto_increment key,
+                                       -> marca varchar(50) not null,
+                                       -> modelo varchar(50) not null,
+                                       -> talla enum("s", "m", "l", "xl", "xxl"));
+Query OK, 0 rows affected (0.0658 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc playeras;
++--------+------------------------------+------+-----+---------+----------------+
+| Field  | Type                         | Null | Key | Default | Extra          |
++--------+------------------------------+------+-----+---------+----------------+
+| id     | int                          | NO   | PRI | NULL    | auto_increment |
+| marca  | varchar(50)                  | NO   |     | NULL    |                |
+| modelo | varchar(50)                  | NO   |     | NULL    |                |
+| talla  | enum('s','m','l','xl','xxl') | YES  |     | NULL    |                |
++--------+------------------------------+------+-----+---------+----------------+
+4 rows in set (0.0042 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > insert into playeras(marca, modelo, talla)
+                                       -> values("Cuidado con el perro", "corte recto", "s");
+Query OK, 1 row affected (0.0195 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > insert into playeras(marca, modelo, talla) values("Cuidado con el perro", "corte recto", "x");
+ERROR: 1265 (01000): Data truncated for column 'talla' at row 1
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from playeras;
++----+----------------------+-------------+-------+
+| id | marca                | modelo      | talla |
++----+----------------------+-------------+-------+
+|  1 | Cuidado con el perro | corte recto | s     |
++----+----------------------+-------------+-------+
+1 row in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > insert into playeras(marca, modelo, talla) values("Cuidado con el perro", "corte recto", "xl");
+Query OK, 1 row affected (0.0175 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from playeras;
++----+----------------------+-------------+-------+
+| id | marca                | modelo      | talla |
++----+----------------------+-------------+-------+
+|  1 | Cuidado con el perro | corte recto | s     |
+|  2 | Cuidado con el perro | corte recto | xl    |
++----+----------------------+-------------+-------+
+2 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table clientes(
+                                       -> id int auto_increment key,
+                                       -> nombre varchar(50) not null,
+                                       -> direccion varchar(50) not null,
+                                       -> telefono int(15),
+                                       -> razon enum("PerMoral", "PerFisica") not null);
+Query OK, 0 rows affected, 1 warning (0.0798 sec)
+Warning (code 1681): Integer display width is deprecated and will be removed in a future release.
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > insert into clientes(nombre, direccion, telefono, razon)
+                                       -> values("Juan Perez", "xxxxx", 123456789, "PerFisica");
+Query OK, 1 row affected (0.0201 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from clientes;
++----+------------+-----------+-----------+-----------+
+| id | nombre     | direccion | telefono  | razon     |
++----+------------+-----------+-----------+-----------+
+|  1 | Juan Perez | xxxxx     | 123456789 | PerFisica |
++----+------------+-----------+-----------+-----------+
+1 row in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc clientes;
++-----------+------------------------------+------+-----+---------+----------------+
+| Field     | Type                         | Null | Key | Default | Extra          |
++-----------+------------------------------+------+-----+---------+----------------+
+| id        | int                          | NO   | PRI | NULL    | auto_increment |
+| nombre    | varchar(50)                  | NO   |     | NULL    |                |
+| direccion | varchar(50)                  | NO   |     | NULL    |                |
+| telefono  | int                          | YES  |     | NULL    |                |
+| razon     | enum('PerMoral','PerFisica') | NO   |     | NULL    |                |
++-----------+------------------------------+------+-----+---------+----------------+
+5 rows in set (0.0031 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > insert into clientes(nombre, direccion, telefono, razon) values("Juan Perez", "xxxxx", 123456789, "PerFisic");
+ERROR: 1265 (01000): Data truncated for column 'razon' at row 1
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from clientes;
++----+------------+-----------+-----------+-----------+
+| id | nombre     | direccion | telefono  | razon     |
++----+------------+-----------+-----------+-----------+
+|  1 | Juan Perez | xxxxx     | 123456789 | PerFisica |
++----+------------+-----------+-----------+-----------+
+1 row in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > insert into clientes(nombre, direccion, telefono, razon) values("Super Montes", "yyyyy", 9876543210, "PerMoral");
+ERROR: 1264 (22003): Out of range value for column 'telefono' at row 1
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > insert into clientes(nombre, direccion, telefono, razon) values("Super Montes", "yyyyy", 76543210, "PerMoral");
+Query OK, 1 row affected (0.0178 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from clientes;
++----+--------------+-----------+-----------+-----------+
+| id | nombre       | direccion | telefono  | razon     |
++----+--------------+-----------+-----------+-----------+
+|  1 | Juan Perez   | xxxxx     | 123456789 | PerFisica |
+|  2 | Super Montes | yyyyy     |  76543210 | PerMoral  |
++----+--------------+-----------+-----------+-----------+
+2 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > insert into clientes(id, nombre, direccion, telefono, razon) values(5, "Super Montes", "yyyyy", 76543210, "PerMoral");
+Query OK, 1 row affected (0.0259 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from clientes;
++----+--------------+-----------+-----------+-----------+
+| id | nombre       | direccion | telefono  | razon     |
++----+--------------+-----------+-----------+-----------+
+|  1 | Juan Perez   | xxxxx     | 123456789 | PerFisica |
+|  2 | Super Montes | yyyyy     |  76543210 | PerMoral  |
+|  5 | Super Montes | yyyyy     |  76543210 | PerMoral  |
++----+--------------+-----------+-----------+-----------+
+3 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > insert into clientes(nombre, direccion, telefono, razon) values("Luisa", "zzzzz", 4652317, "PerFisica");
+Query OK, 1 row affected (0.0070 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from clientes;
++----+--------------+-----------+-----------+-----------+
+| id | nombre       | direccion | telefono  | razon     |
++----+--------------+-----------+-----------+-----------+
+|  1 | Juan Perez   | xxxxx     | 123456789 | PerFisica |
+|  2 | Super Montes | yyyyy     |  76543210 | PerMoral  |
+|  5 | Super Montes | yyyyy     |  76543210 | PerMoral  |
+|  6 | Luisa        | zzzzz     |   4652317 | PerFisica |
++----+--------------+-----------+-----------+-----------+
+4 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc clientes;
++-----------+------------------------------+------+-----+---------+----------------+
+| Field     | Type                         | Null | Key | Default | Extra          |
++-----------+------------------------------+------+-----+---------+----------------+
+| id        | int                          | NO   | PRI | NULL    | auto_increment |
+| nombre    | varchar(50)                  | NO   |     | NULL    |                |
+| direccion | varchar(50)                  | NO   |     | NULL    |                |
+| telefono  | int                          | YES  |     | NULL    |                |
+| razon     | enum('PerMoral','PerFisica') | NO   |     | NULL    |                |
++-----------+------------------------------+------+-----+---------+----------------+
+5 rows in set (0.0026 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > insert into clientes(nombre, direccion, telefono, razon) values("Luisa", "zzzzz", 4652317, "Persona Moral");
+ERROR: 1265 (01000): Data truncated for column 'razon' at row 1
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > show create table clientes;
++----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table    | Create Table
+
+                                                                               |
++----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| clientes | CREATE TABLE `clientes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NOT NULL,
+  `direccion` varchar(50) NOT NULL,
+  `telefono` int DEFAULT NULL,
+  `razon` enum('PerMoral','PerFisica') NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0117 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table clientes
+                                       -> add rfc varchar(13)
+                                       -> after nombre;
+Query OK, 0 rows affected (0.1248 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc cllientes;
+ERROR: 1146 (42S02): Table 'tbd_e1.cllientes' doesn't exist
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc clientes;
++-----------+------------------------------+------+-----+---------+----------------+
+| Field     | Type                         | Null | Key | Default | Extra          |
++-----------+------------------------------+------+-----+---------+----------------+
+| id        | int                          | NO   | PRI | NULL    | auto_increment |
+| nombre    | varchar(50)                  | NO   |     | NULL    |                |
+| rfc       | varchar(13)                  | YES  |     | NULL    |                |
+| direccion | varchar(50)                  | NO   |     | NULL    |                |
+| telefono  | int                          | YES  |     | NULL    |                |
+| razon     | enum('PerMoral','PerFisica') | NO   |     | NULL    |                |
++-----------+------------------------------+------+-----+---------+----------------+
+6 rows in set (0.0030 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from clientes;
++----+--------------+------+-----------+-----------+-----------+
+| id | nombre       | rfc  | direccion | telefono  | razon     |
++----+--------------+------+-----------+-----------+-----------+
+|  1 | Juan Perez   | NULL | xxxxx     | 123456789 | PerFisica |
+|  2 | Super Montes | NULL | yyyyy     |  76543210 | PerMoral  |
+|  5 | Super Montes | NULL | yyyyy     |  76543210 | PerMoral  |
+|  6 | Luisa        | NULL | zzzzz     |   4652317 | PerFisica |
++----+--------------+------+-----------+-----------+-----------+
+4 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL >
