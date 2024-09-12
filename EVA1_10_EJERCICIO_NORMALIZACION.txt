@@ -1,0 +1,210 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. Todos los derechos reservados.
+
+Instale la versión más reciente de PowerShell para obtener nuevas características y mejoras. https://aka.ms/PSWindows
+
+PS C:\Users\tejed> mysqlsh
+MySQL Shell 8.0.38
+
+Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.39 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| tbd_e1             |
+| world              |
++--------------------+
+7 rows in set (0.0130 sec)
+ MySQL  localhost:3306 ssl  SQL > create database Empresa;
+Query OK, 1 row affected (0.0286 sec)
+ MySQL  localhost:3306 ssl  SQL > show tables;
+ERROR: 1046 (3D000): No database selected
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| empresa            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| tbd_e1             |
+| world              |
++--------------------+
+8 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  SQL > use empresa;
+Default schema set to `empresa`.
+Fetching global names, object names from `empresa` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  empresa  SQL > show tables;
+Empty set (0.0231 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table empleado(
+                                        -> id varchar(7) not null,
+                                        -> nombre varchar(50) not null,
+                                        -> genero enum("male", "female") not null,
+                                        -> etnia varchar(50),
+                                        -> edad int not null,
+                                        -> idLocalizacion varchar(3) not null);
+Query OK, 0 rows affected (0.0530 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > show tables;
++-------------------+
+| Tables_in_empresa |
++-------------------+
+| empleado          |
++-------------------+
+1 row in set (0.0127 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table puestoTrabajo(
+                                        -> idPT int not null,
+                                        -> idE varchar(7) not null,
+                                        -> JobTitle varchar(50) not null,
+                                        -> Department varchar(50) not null,
+                                        -> BusinessUnit varchar(50) not null);
+Query OK, 0 rows affected (0.0557 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > show tables;
++-------------------+
+| Tables_in_empresa |
++-------------------+
+| empleado          |
+| puestotrabajo     |
++-------------------+
+2 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table Nomina(
+                                        -> idNom varchar(3) not null,
+                                        -> idE varchar(7) not null,
+                                        -> HireDate varchar(15) not null,
+                                        -> AnnualSal int not null,
+                                        -> Bonus int not null);
+Query OK, 0 rows affected (0.0519 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > show tables;
++-------------------+
+| Tables_in_empresa |
++-------------------+
+| empleado          |
+| nomina            |
+| puestotrabajo     |
++-------------------+
+3 rows in set (0.0022 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table Salida(
+                                        -> idSal int auto_increment key,
+                                        -> idE varchar(7) not null,
+                                        -> Exit varchar(15) not null);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Exit varchar(15) not null)' at line 4
+ MySQL  localhost:3306 ssl  empresa  SQL > create table Salida( idSal int auto_increment key, idE varchar(7) not null, FechaSal varchar(15) not null);
+Query OK, 0 rows affected (0.0530 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > show tables;
++-------------------+
+| Tables_in_empresa |
++-------------------+
+| empleado          |
+| nomina            |
+| puestotrabajo     |
+| salida            |
++-------------------+
+4 rows in set (0.0023 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table Localizacion(
+                                        -> idLocalizacion varchar(3) key,
+                                        -> pais varchar(25) not null,
+                                        -> ciudad varchar(25) not null);
+Query OK, 0 rows affected (0.0517 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > show tables;
++-------------------+
+| Tables_in_empresa |
++-------------------+
+| empleado          |
+| localizacion      |
+| nomina            |
+| puestotrabajo     |
+| salida            |
++-------------------+
+5 rows in set (0.0025 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > alter table empleado
+                                        -> change column id
+                                        -> idE varchar(7) key;
+Query OK, 0 rows affected (0.1017 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  empresa  SQL > desc empleado;
++----------------+-----------------------+------+-----+---------+-------+
+| Field          | Type                  | Null | Key | Default | Extra |
++----------------+-----------------------+------+-----+---------+-------+
+| idE            | varchar(7)            | NO   | PRI | NULL    |       |
+| nombre         | varchar(50)           | NO   |     | NULL    |       |
+| genero         | enum('male','female') | NO   |     | NULL    |       |
+| etnia          | varchar(50)           | YES  |     | NULL    |       |
+| edad           | int                   | NO   |     | NULL    |       |
+| idLocalizacion | varchar(3)            | NO   |     | NULL    |       |
++----------------+-----------------------+------+-----+---------+-------+
+6 rows in set (0.0158 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > alter table puestoTrabajo
+                                        -> chance column idPT
+                                        -> idPT int key;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'chance column idPT
+idPT int key' at line 2
+ MySQL  localhost:3306 ssl  empresa  SQL > alter table puestoTrabajo change column idPT idPT int key;
+Query OK, 0 rows affected (0.0911 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  empresa  SQL > desc puestotrabajo;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| idPT         | int         | NO   | PRI | NULL    |       |
+| idE          | varchar(7)  | NO   |     | NULL    |       |
+| JobTitle     | varchar(50) | NO   |     | NULL    |       |
+| Department   | varchar(50) | NO   |     | NULL    |       |
+| BusinessUnit | varchar(50) | NO   |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+5 rows in set (0.0024 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > alter table nomina
+                                        -> change column idNom
+                                        -> idNom varchar(3) key;
+Query OK, 0 rows affected (0.0968 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  empresa  SQL > desc nomina;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| idNom     | varchar(3)  | NO   | PRI | NULL    |       |
+| idE       | varchar(7)  | NO   |     | NULL    |       |
+| HireDate  | varchar(15) | NO   |     | NULL    |       |
+| AnnualSal | int         | NO   |     | NULL    |       |
+| Bonus     | int         | NO   |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+5 rows in set (0.0022 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc localizacion;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| idLocalizacion | varchar(3)  | NO   | PRI | NULL    |       |
+| pais           | varchar(25) | NO   |     | NULL    |       |
+| ciudad         | varchar(25) | NO   |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+3 rows in set (0.0029 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc salida;
++----------+-------------+------+-----+---------+----------------+
+| Field    | Type        | Null | Key | Default | Extra          |
++----------+-------------+------+-----+---------+----------------+
+| idSal    | int         | NO   | PRI | NULL    | auto_increment |
+| idE      | varchar(7)  | NO   |     | NULL    |                |
+| FechaSal | varchar(15) | NO   |     | NULL    |                |
++----------+-------------+------+-----+---------+----------------+
+3 rows in set (0.0026 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL >
